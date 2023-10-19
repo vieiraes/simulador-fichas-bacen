@@ -3,5 +3,7 @@
         "activityBar.background": "#1D303B",
         "titleBar.activeBackground": "#294353",
         "titleBar.activeForeground": "#FAFBFC"
-    }
+    },
+    "debug.console.fontSize": 14,
+    "terminal.integrated.fontSize": 18
 }
