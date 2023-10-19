@@ -1,10 +1,12 @@
 import { CronJob } from 'cron'
 import axios from 'axios'
 import { wallets } from './controllers/Pix.controller'
+require('dotenv').config()
+
 
 async function execute(walletid) {
     try {
-        const response = await axios.post(`http://localhost:3000/pix/balde/recharge?walletId=${walletid}`)
+        const response = await axios.post(`${process.env.URL}/pix/balde/recharge?walletId=${walletid}`)
         console.log(response.data)
         
     } catch (error) {
