@@ -22,7 +22,8 @@ router.post('/balde/recharge', (req: Request, res: Response) => {
             wallet
         })
     }
-    if (wallet.balde == Number(process.env.MAX_TOKENS)) {
+    if (wallet.balde >= Number(process.env.MAX_TOKENS)) {
+        wallet.balde = 1000
         res.status(200).json({
             message: "Limite do balde atingido",
             "BACEN": "ENTRIES_READ_USER_ANTISCAN_V2",
