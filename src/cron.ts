@@ -4,7 +4,7 @@ import { wallets } from './controllers/Pix.controller'
 
 async function execute(walletid) {
     try {
-        const response = await axios.post(`http://localhost:3000/pix/balde?wallet=${walletid}`)
+        const response = await axios.post(`http://localhost:3000/pix/balde/recharge?walletId=${walletid}`)
         console.log(response.data)
         
     } catch (error) {

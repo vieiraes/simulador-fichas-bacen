@@ -10,27 +10,27 @@ const wallet3 = { id: "cf82633d-71f9-4ff0-ab3e-7a8163d3fc06", balde: Number(proc
 export let wallets = [wallet1, wallet2, wallet3]
 
 //AXIOS
-router.post('/balde', (req: Request, res: Response) => {
-    const { wallet } = req.query
+router.post('/balde/recharge', (req: Request, res: Response) => {
+    const { walletId } = req.query
 
-    const walletReturn = wallets.find(w => w.id === wallet)
+    const wallet = wallets.find(w => w.id === walletId)
 
-    if (walletReturn.balde < Number(process.env.MAX_TOKENS)) {
-        walletReturn.balde += 2
+    if (wallet.balde < Number(process.env.MAX_TOKENS)) {
+        wallet.balde += 2
         res.status(201).json({
             message: "2 fichas recuperadas no balde",
-            walletReturn
+            wallet
         })
     }
-    if (walletReturn.balde == Number(process.env.MAX_TOKENS)) {
+    if (wallet.balde == Number(process.env.MAX_TOKENS)) {
         res.status(200).json({
             message: "Limite do balde atingido",
             "BACEN": "ENTRIES_READ_USER_ANTISCAN_V2",
-            walletReturn
+            wallet
         })
     }
-    if (!walletReturn) {
-        res.status(404).json({ message: "Wallet não encontrada", walletReturn })
+    if (!wallet) {
+        res.status(404).json({ message: "Wallet não encontrada", wallet })
     }
 })
 
@@ -41,42 +41,42 @@ router.get('/balde', (req: Request, res: Response) => {
 
 
 router.post('/success', (req: Request, res: Response) => {
-    const { wallet } = req.query
+    const { walletId } = req.query
 
-    const walletReturn = wallets.find(w => w.id === wallet)
+    const wallet = wallets.find(w => w.id === walletId)
 
-    if (walletReturn.balde < 21) {
-        res.status(400).json({ "message": 'Pix não permitido. Saldo do balde insuficiente', walletReturn })
+    if (wallet.balde < 21) {
+        res.status(400).json({ "message": 'Pix não permitido. Saldo do balde insuficiente', wallet })
     }
-    if (walletReturn.balde > 20) {
-        walletReturn.balde -= 1
-        res.status(201).json({ "message": 'Pix efetuado com sucesso.', walletReturn })
-        walletReturn.balde += 1
+    if (wallet.balde > 20) {
+        wallet.balde -= 1
+        res.status(201).json({ "message": 'Pix efetuado com sucesso.', wallet })
+        wallet.balde += 1
     }
 
-    if (!walletReturn) {
-        res.status(404).json({ message: "Wallet não encontrada", walletReturn })
+    if (!wallet) {
+        res.status(404).json({ message: "Wallet não encontrada", wallet })
     }
 })
 
 
 router.post('/fail', (req: Request, res: Response) => {
-    const { wallet } = req.query
+    const { walletId } = req.query
 
-    const walletReturn = wallets.find(w => w.id === wallet)
+    const wallet = wallets.find(w => w.id === walletId)
 
-    if (walletReturn.balde < 20) {
+    if (wallet.balde < 20) {
         res.status(429).json({
             "message": 'Pix não permitido. Saldo do balde insuficiente',
             "BACEN": "ENTRIES_READ_USER_ANTISCAN_V2",
-            walletReturn
+            wallet
         })
     }
-    if (walletReturn.balde >= 20) {
-        walletReturn.balde -= 20
-        res.status(400).json({ "message": 'Pix não efeutado. Chave inválida.', walletReturn })
+    if (wallet.balde >= 20) {
+        wallet.balde -= 20
+        res.status(400).json({ "message": 'Pix não efeutado. Chave inválida.', wallet })
     }
-    if (!walletReturn) {
+    if (!wallet) {
         res.status(404).json({ message: "Wallet não encontrada." })
     }
 })
