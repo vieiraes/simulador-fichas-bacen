@@ -1,0 +1,33 @@
+{
+    "compilerOptions": {
+        "target": "es2020", /* Set the JavaScript language version for emitted JavaScript and include compatible library declarations. */
+        "module": "CommonJS", /* Specify what module code is generated. */
+        "allowJs": true, /* Allow JavaScript files to be a part of your program. Use the 'checkJS' option to get errors from these files. */
+        "checkJs": true, /* Enable error reporting in type-checked JavaScript files. */
+        "outDir": "./dist", /* Specify an output folder for all emitted files. */
+        "esModuleInterop": true, /* Emit additional JavaScript to ease support for importing CommonJS modules. This enables 'allowSyntheticDefaultImports' for type compatibility. */
+        "strict": true, /* Enable all strict type-checking options. */
+        "noImplicitAny": false, /* Enable error reporting for expressions and declarations with an implied 'any' type. */
+        "skipLibCheck": true, /* Skip type checking all .d.ts files. */
+        "sourceMap": true,
+        "resolveJsonModule": true,
+        "declaration": true,
+        "removeComments": true,
+        "emitDecoratorMetadata": true,
+        "experimentalDecorators": true,
+        "allowSyntheticDefaultImports": true,
+        "baseUrl": "./",
+        "incremental": true,
+        "strictNullChecks": false,
+        "strictBindCallApply": false,
+        "forceConsistentCasingInFileNames": false,
+        "noFallthroughCasesInSwitch": false
+    },
+    "include": [
+        "src/**/*"
+    ],
+    "exclude": [
+        "node_modules",
+        "**/*.spec.ts"
+    ]
+}
