@@ -3,12 +3,12 @@
   "version": "1.0.0",
   "license": "ISC",
   "scripts": {
-    "build": "tsc",
+    "build": "rm -rf ./dist && tsc",
     "worker": "node dist/cron.js",
     "server": "node dist/server.js",
     "start": "concurrently \"npm run worker\" \"npm run server\"",
-    "nodemon:worker": "nodemon src/cron.ts",
-    "nodemon:server": "nodemon src/server.ts"
+    "dev:worker": "nodemon --exec ts-node ./src/cron.ts",
+    "dev:server": "nodemon --exec ts-node ./src/server.ts"
     },
   "keywords": [
     "bacen",
