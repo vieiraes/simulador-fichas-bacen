@@ -1,4 +1,4 @@
-# Simulador de Consumo de Fichas do de Balde do BACEN
+# Simulador de Consumo de Fichas do Balde PIX do BACEN
 
 Este projeto é um simulador de consumo de fichas no balde do BACEN (Banco Central do Brasil) desenvolvido em Node.js e Express. Ele simula operações relacionadas ao Pix, incluindo adição de fichas, verificação de saldo e execução de transações de sucesso e falha.
 
