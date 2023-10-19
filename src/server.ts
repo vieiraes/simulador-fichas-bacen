@@ -1,9 +1,8 @@
 import express from 'express'
 import { PixController } from './controllers'
+require('dotenv').config()
 
-
-
-const port: number = 3000
+const port:number = Number(process.env.PORT) || 3000
 const app = express()
 const router= express.Router()
 
