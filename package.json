@@ -6,10 +6,10 @@
     "build": "rm -rf ./dist && tsc",
     "worker": "node dist/cron.js",
     "server": "node dist/server.js",
-    "start": "npm run server && sleep 6 && npm run worker",
+    "start": "concurrently \"npm run worker\" \"npm run server\"",
     "dev:worker": "nodemon --exec ts-node ./src/cron.ts",
     "dev:server": "nodemon --exec ts-node ./src/server.ts"
-    },
+  },
   "keywords": [
     "bacen",
     "pix",
