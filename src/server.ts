@@ -1,26 +1,26 @@
 import express from 'express'
-import { PixController } from './controllers'
 require('dotenv').config()
+import { router } from './routes'
 
-const port:number = Number(process.env.PORT) || 3000
+const port: number = Number(process.env.PORT) || 3000
 const app = express()
-const router= express.Router()
+
 
 app.use(express.json())
 app.use(router)
 
 
-function bootstrap(): void {
+function bootstrap(): undefined {
     const server = app.listen(port)
     if (server) {
         console.log(`Servidor está rodando na porta ${port} 🚀`)
     } else {
         console.log(`Servidor falhou ao iniciar 😥`)
-        process.exit(1) 
+        process.exit(1)
     }
+    return undefined
 }
 
-app.use('/pix', PixController)
 
 bootstrap()
 
