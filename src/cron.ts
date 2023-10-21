@@ -6,7 +6,7 @@ require('dotenv').config()
 
 async function execute(walletid: string): Promise<void> {
     try {
-        const response = await axios.post(`${process.env.URL}/pix/balde/recharge?walletId=${walletid}`)
+        const response = await axios.post(`${process.env.URL}/pix/balde/recarga`)
         console.log(response.data)
 
     } catch (error) {

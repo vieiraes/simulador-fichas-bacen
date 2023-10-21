@@ -1,74 +1,103 @@
 import { Request, Response } from "express"
 import express from 'express'
 require('dotenv').config()
-import { clientWallets } from '../models/wallets.model'
+import { ISPB, clientWallets } from '../models/wallets.model'
 
 const router = express.Router()
 
-
-//AXIOS
 router.post('/balde/recarga', (req: Request, res: Response) => {
-    const { walletId } = req.query
+    clientWallets.forEach(client => {
+        
+        if (client.balde < Number(process.env.BALDE_CNPJ)) {
+            client.balde += 2
+        }
+        if (client.balde >= Number(process.env.BALDE_CNPJ)) {
+            client.balde = Number(process.env.BALDE_CNPJ)
+        }
+    })
 
-    const wallet = clientWallets.find(w => w.id === walletId)
-
-    if (wallet.balde < Number(process.env.BALDE_CNPJ)) {
-        wallet.balde += 2
-        res.status(201).json({
-            message: "2 fichas recuperadas no balde",
-            wallet
-        })
+    if (ISPB.balde < Number(process.env.BALDE_ISPB)) {
+        ISPB.balde += 2
     }
-    if (wallet.balde >= Number(process.env.BALDE_CNPJ)) {
-        wallet.balde = 1000
-        res.status(200).json({
-            message: "Limite do balde atingido",
-            "BACEN": "ENTRIES_READ_USER_ANTISCAN_V2",
-            wallet
-        })
+    if (ISPB.balde >= Number(process.env.BALDE_ISPB)) {
+        ISPB.balde = Number(process.env.BALDE_ISPB)
     }
-    if (!wallet) {
-        res.status(404).json({ message: "Wallet não encontrada", wallet })
-    }
+    res.status(200).json({
+        message: "Recarga de fichas executada.",
+        wallets: clientWallets,
+        ispb: ISPB.balde
+    })
 })
+
 
 router.post('/sucesso', (req: Request, res: Response) => {
     const { walletId } = req.query
+    const client = clientWallets.find(w => w.id === walletId)
 
-    const wallet = clientWallets.find(w => w.id === walletId)
 
-    if (wallet.balde < 21) {
-        res.status(400).json({ "message": 'Pix não permitido. Saldo do balde insuficiente', wallet })
+    if (client.balde < 21) {
+        res.status(400).json({
+            "message": 'Pix não permitido. Saldo do balde CNPJ insuficiente',
+            wallet: client,
+            ispb: ISPB.balde
+        })
     }
-    if (wallet.balde > 20) {
-        wallet.balde -= 1
-        res.status(201).json({ "message": 'Pix efetuado com sucesso.', wallet })
-        wallet.balde += 1
+    if (ISPB.balde < 3) {
+        res.status(400).json({
+            "message": 'Pix não permitido. Saldo do balde ISPB insuficiente',
+            wallet: client,
+            ispb: ISPB.balde
+        })
     }
-
-    if (!wallet) {
-        res.status(404).json({ message: "Wallet não encontrada", wallet })
+    if (client.balde > 20 && ISPB.balde >= 3) {
+        client.balde -= 1
+        ISPB.balde -= 1
+        res.status(201).json({
+            "message": 'Pix efetuado com sucesso.',
+            wallet: client,
+            ispb: ISPB.balde
+        })
+        client.balde += 1
+        ISPB.balde += 1
+    }
+    if (!client) {
+        res.status(404).json({
+            message: "Wallet não encontrada",
+            wallet: client
+        })
     }
 })
 
 
 router.post('/falha', (req: Request, res: Response) => {
     const { walletId } = req.query
+    const client = clientWallets.find(w => w.id === walletId)
 
-    const wallet = clientWallets.find(w => w.id === walletId)
-
-    if (wallet.balde < 20) {
-        res.status(429).json({
-            "message": 'Pix não permitido. Saldo do balde insuficiente',
-            "BACEN": "ENTRIES_READ_USER_ANTISCAN_V2",
-            wallet
+    if (client.balde < 21) {
+        res.status(400).json({
+            "message": 'Pix não permitido. Saldo do balde CNPJ insuficiente',
+            wallet: client,
+            ispb: ISPB.balde
         })
     }
-    if (wallet.balde >= 20) {
-        wallet.balde -= 20
-        res.status(400).json({ "message": 'Pix não efeutado. Chave inválida.', wallet })
+    if (ISPB.balde < 3) {
+        res.status(400).json({
+            "message": 'Pix não permitido. Saldo do balde ISPB insuficiente',
+            wallet: client,
+            ispb: ISPB.balde
+        })
     }
-    if (!wallet) {
+
+    if (client.balde > 20 && ISPB.balde >= 3) {
+        client.balde -= 20
+        ISPB.balde -= 3
+        res.status(429).json({
+            message: "Pix não efeutado por chave inválida.",
+            wallets: client,
+            ispb: ISPB.balde
+        })
+    }
+    if (!client) {
         res.status(404).json({ message: "Wallet não encontrada." })
     }
 })

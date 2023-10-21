@@ -1,69 +1,97 @@
-# Simulador de Consumo de Fichas do Balde PIX do BACEN
+# API Simulador de Controle de Fichas DICT
 
-Este projeto é um simulador de consumo de fichas no balde do BACEN (Banco Central do Brasil) desenvolvido em Node.js e Express. Ele simula operações relacionadas ao Pix, incluindo adição de fichas, verificação de saldo e execução de transações de sucesso e falha.
+Esta API foi desenvolvida exclusivamente para simular cenários de transações e consultas no DICT (Diretório de Identificadores de Contas Transacionais). Não realiza transações ou consultas reais, mas simula o comportamento das regras de limitação de consultas.
 
-## Descrição do Projeto
+## Rotas
 
-O simulador consiste em três arquivos principais: `pix.controller.ts`, `cron.ts` e `server.ts`. Cada um desempenha um papel específico na simulação das operações do Pix.
+### `/saldos`
 
-### Arquivo `pix.controller.ts`
+- **Método**: GET
+- **Descrição**: Retorna os saldos dos baldes dos clientes e do ISPB.
+- **Exemplo**:
+  ```http
+  GET /saldos
+  ```
 
-O `pix.controller.ts` contém as rotas e controladores que permitem a manipulação das operações de Pix.
+### `/sucesso`
 
-#### Rotas
+- **Método**: GET
+- **Descrição**: Simula uma consulta de chave bem-sucedida, desde que os saldos dos baldes permitam.
+- **Parâmetros**: walletId (ID da wallet que realiza a consulta)
+- **Exemplo**:
+  ```http
+  GET /sucesso?walletId=12345
+  ```
 
-1. **POST /balde**
-   - Esta rota permite adicionar fichas a uma carteira.
-   - Parâmetros de consulta: `wallet` (ID da carteira)
-   - Respostas:
-     - Status 201: Fichas adicionadas com sucesso.
-     - Status 200: Limite de fichas atingido.
-     - Status 404: Carteira não encontrada.
+### `/falha`
 
-2. **GET /balde**
-   - Esta rota permite verificar o saldo de todas as carteiras.
-   - Resposta:
-     - Status 200: Retorna o saldo de todas as carteiras.
+- **Método**: GET
+- **Descrição**: Simula uma consulta de chave que não foi encontrada, desde que os saldos dos baldes permitam.
+- **Parâmetros**: walletId (ID da wallet que realiza a consulta)
+- **Exemplo**:
+  ```http
+  GET /falha?walletId=12345
+  ```
 
-3. **POST /success**
-   - Esta rota simula uma transação de sucesso.
-   - Parâmetros de consulta: `wallet` (ID da carteira)
-   - Respostas:
-     - Status 400: Pix não permitido devido a saldo insuficiente.
-     - Status 201: Pix efetuado com sucesso.
+### `/balde/recarga`
 
-4. **POST /fail**
-   - Esta rota simula uma transação com falha.
-   - Parâmetros de consulta: `wallet` (ID da carteira)
-   - Respostas:
-     - Status 400: Pix não permitido devido a saldo insuficiente.
-     - Status 400: Pix não efetuado devido a falha na consulta de chave.
-     - Status 404: Carteira não encontrada.
+- **Método**: POST
+- **Descrição**: Simula a recarga dos saldos dos baldes dos clientes e do ISPB.
+- **Exemplo**:
+  ```http
+  POST /balde/recarga
+  ```
 
-### Arquivo `cron.ts`
+### `/pix/sucesso`
 
-O `cron.ts` contém uma tarefa cron que atualiza automaticamente o saldo das carteiras.
+- **Método**: POST
+- **Descrição**: Simula uma transação de Pix bem-sucedida, desde que os saldos dos baldes permitam.
+- **Parâmetros**: walletId (ID da wallet que realiza a transação)
+- **Exemplo**:
+  ```http
+  POST /pix/sucesso?walletId=12345
+  ```
 
-- A tarefa cron envia uma solicitação POST para a rota `/pix/balde` a cada 2 segundos, recarregando em 2 fichas o saldo das carteiras até o seu limite preestabilecido no aqruivo .ENV. geralmente é de 1000 fichas.
+### `/pix/falha`
 
-### Arquivo `server.ts`
+- **Método**: POST
+- **Descrição**: Simula uma transação de Pix que falhou devido a uma chave inválida, desde que os saldos dos baldes permitam.
+- **Parâmetros**: walletId (ID da wallet que realiza a transação)
+- **Exemplo**:
+  ```http
+  POST /pix/falha?walletId=12345
+  ```
 
-O `server.ts` inicializa o servidor Express e configura as rotas relacionadas ao Pix.
+## Worker de Recarga
 
-- Inicializa um servidor Express na porta 3000.
-- Configura o uso de JSON no aplicativo Express.
-- Configura as rotas relacionadas ao Pix com base no `PixController`.
-- Inicializa o servidor e exibe uma mensagem de sucesso ou falha.
+Este worker executa a tarefa de recarregar os saldos dos baldes em intervalos regulares, simulando a recarga de fichas.
 
-## Executando o Projeto
+- **Intervalo de Execução**: A cada 2 segundos.
 
-Para executar o projeto, siga estas etapas:
+Lembre-se de que esta API é exclusivamente para fins de simulação e não realiza transações ou consultas reais. Ela é destinada a testes e cenários de treinamento. Certifique-se de adaptar a documentação e os exemplos de uso conforme necessário para seu ambiente de desenvolvimento.
 
-1. Certifique-se de ter o Node.js instalado em sua máquina.
-2. Abra um terminal na pasta raiz do projeto.
-3. Execute `npm install` para instalar as dependências.
-4. Execute `npm start` para iniciar o servidor Express.
 
-Certifique-se de ajustar e expandir o projeto conforme necessário para atender aos requisitos específicos do seu caso de uso.
+# Inicializando o Projeto
 
-Este simulador é um exemplo simples de como as operações Pix podem ser modeladas em uma aplicação Node.js. Use-o como base para desenvolver e testar funcionalidades relacionadas ao Pix ou como uma ferramenta de simulação para entender o comportamento das operações de fichas no balde do BACEN.
+Siga estes passos para iniciar o projeto:
+
+1. Clone o repositório.
+2. Acesse o diretório do projeto.
+3. Instale as dependências com `npm install`.
+
+## Comandos Disponíveis
+
+- `npm run build`: Compila o código TypeScript.
+- `npm run worker`: Inicia o worker de recarga de fichas.
+- `npm run server`: Inicia o servidor da API.
+- `npm start`: Inicia ambos worker e servidor.
+- `npm run dev:worker`: Inicia o worker em modo de desenvolvimento.
+- `npm run dev:server`: Inicia o servidor em modo de desenvolvimento.
+
+Lembre-se de configurar o arquivo `.env` conforme necessário.
+
+Acesse a documentação das rotas da API na seção anterior.
+
+## Créditos
+
+Este projeto foi desenvolvido por Bruno Vieira como parte de um projeto de simulação para fins educacionais e de treinamento.
