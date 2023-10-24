@@ -15,7 +15,7 @@ async function execute(walletid: string): Promise<void> {
     return undefined
 }
 
-const job = new CronJob('*/2 * * * * *', async () => {
+const job = new CronJob(`*0 */${Number(process.env.TIME)} * * * *`, async () => {
     const promises = clientWallets.map(w => execute(w.id))
     await Promise.all(promises)
     console.log('cron running a task every 2 seconds')
