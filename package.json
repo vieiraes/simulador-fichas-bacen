@@ -7,8 +7,8 @@
     "worker": "node dist/cron.js",
     "server": "node dist/server.js",
     "start": "concurrently \"npm run worker\" \"npm run server\"",
-    "dev:worker": "nodemon --exec ts-node ./src/cron.ts",
-    "dev:server": "nodemon --exec ts-node ./src/server.ts"
+    "dev:worker": "nodemon --exec ts-node src/cron.ts",
+    "dev:server": "nodemon --exec ts-node src/server.ts"
   },
   "keywords": [
     "bacen",
