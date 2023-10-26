@@ -7,21 +7,19 @@ const router = express.Router()
 
 router.post('/balde/recarga', (req: Request, res: Response) => {
     clientWallets.forEach(client => {
-        
         if (client.balde < Number(process.env.BALDE_CNPJ)) {
             client.balde += 2
+            if (ISPB.balde < Number(process.env.BALDE_ISPB)) {
+                ISPB.balde += 2
+            }
+            if (ISPB.balde >= Number(process.env.BALDE_ISPB)) {
+                ISPB.balde = Number(process.env.BALDE_ISPB)
+            }
         }
         if (client.balde >= Number(process.env.BALDE_CNPJ)) {
             client.balde = Number(process.env.BALDE_CNPJ)
         }
     })
-
-    if (ISPB.balde < Number(process.env.BALDE_ISPB)) {
-        ISPB.balde += 2
-    }
-    if (ISPB.balde >= Number(process.env.BALDE_ISPB)) {
-        ISPB.balde = Number(process.env.BALDE_ISPB)
-    }
     res.status(200).json({
         message: "Recarga de fichas executada.",
         wallets: clientWallets,
