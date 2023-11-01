@@ -1,0 +1,18 @@
+services:
+  app:
+    build:
+      context: .
+      dockerfile: ./Dockerfile.web
+    ports:
+      - "3000:3000"
+    environment:
+      - name=value
+  worker:
+    build:
+      context: .
+      dockerfile: ./Dockerfile.worker
+    environment:
+      - CRON=1
+      - BALDE_CNPJ=1000
+      - BALDE_ISPB=1000
+      - URL=localhost:3000
