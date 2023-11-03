@@ -7,7 +7,7 @@ export let options = {
     noVUConnectionReuse: true,
     scenarios: {
         Fail_Interation: {
-            startTime: '2s',
+            startTime: '120s',
             executor: 'constant-arrival-rate',
             preAllocatedVUs: 2,
             rate: 15,
@@ -39,34 +39,34 @@ export default function () {
 
     ///////////////////////////////////////////////////
     group('PIX', () => {
-        group('PIX FALHA', function () {
+        group('PIX FAIL', function () {
             const res = http.post(`${url}/pix/falha?walletId=${walletRandom(arrayWallets)}`, JSON.stringify({}), params)
             // const status = 
             check(res, { 'status was 429': (r) => r.status == 429 })
             // if (!status) {
-            console.log(`PIX FALHA Status:${res.status} `)
+            console.log(`PIX FAIL Status:${res.status} `)
             // }
         })
     })
 
     //////////////////////////////////////////////////
 
-    group('CONSULTA', () => {
+    group('GET KEY', () => {
         // for (let i = 0; i < 3; i++) {
-        group('CONSULTA SUCESSO', function () {
+        group('GET KEY SUCCESS', function () {
             const res = http.get(`${url}/chave/sucesso?walletId=${walletRandom(arrayWallets)}`, JSON.stringify({}), params)
             const status = check(res, { 'status was 201': (r) => r.status == 201 })
             // if (!status) {
-            console.log(`CONSULTA SUCESSO Status:${res.status} `)
+            console.log(`GET KEY SUCCESS Status:${res.status} `)
             // }
         })
         // }
 
-        // group('CONSULTA FALHA', function () {
+        // group('GET KEY FAIL', function () {
         //     const res = http.get(`${url}/chave/falha?walletId=${walletRandom(arrayWallets)}`, JSON.stringify({}), params)
         //     const status = check(res, { 'status was 420': (r) => r.status == 429 })
         //     if (!status) {
-        //         console.log(`CONSULTA FALHA Status:${res.status} `)
+        //         console.log(`GET KEY FAIL Status:${res.status} `)
         //     }
         // })
     })

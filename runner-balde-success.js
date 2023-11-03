@@ -39,27 +39,27 @@ export default function () {
 
     ///////////////////////////////////////////////////
     group('PIX', () => {
-        group('PIX SUCESSO', function () {
+        group('PIX SUCCESS', function () {
             const res = http.post(`${url}/pix/sucesso?walletId=${walletRandom(arrayWallets)}`, JSON.stringify({}), params)
             check(res, { 'status was 201': (r) => r.status == 201 })
-            console.log(`PIX SUCESSO Status:${res.status} `)
+            console.log(`PIX SUCCESS Status:${res.status} `)
         })
     })
 
     //////////////////////////////////////////////////
 
-    group('CONSULTA', () => {
-        group('CONSULTA SUCESSO', function () {
+    group('GET KEY', () => {
+        group('GET KEY SUCCESS', function () {
             const res = http.get(`${url}/chave/sucesso?walletId=${walletRandom(arrayWallets)}`, JSON.stringify({}), params)
             const status = check(res, { 'status was 201': (r) => r.status == 201 })
-            console.log(`CONSULTA SUCESSO Status:${res.status} `)
+            console.log(`GET KEY SUCCESS Status:${res.status} `)
         })
 
-        //     group('CONSULTA FALHA', function () {
+        //     group('GET KEY SUCCESS', function () {
         //         const res = http.get(`${url}/chave/falha?walletId=${walletRandom(arrayWallets)}`, JSON.stringify({}), params)
         //         const status = check(res, { 'status was 420': (r) => r.status == 429 })
         //         if (!status) {
-        //             console.log(`CONSULTA FALHA Status:${res.status} `)
+        //             console.log(`GET KEY SUCCESS Status:${res.status} `)
         //         }
         //     })
     })
