@@ -6,15 +6,16 @@ import { ISPB, clientWallets } from '../models/wallets.model'
 const router = express.Router()
 
 router.post('/balde/recarga', (req: Request, res: Response) => {
+    if (ISPB.balde < Number(process.env.BALDE_ISPB)) {
+        ISPB.balde += 2
+    }
+    if (ISPB.balde >= Number(process.env.BALDE_ISPB)) {
+        ISPB.balde = Number(process.env.BALDE_ISPB)
+    }
+
     clientWallets.forEach(client => {
         if (client.balde < Number(process.env.BALDE_CNPJ)) {
             client.balde += 2
-            if (ISPB.balde < Number(process.env.BALDE_ISPB)) {
-                ISPB.balde += 2
-            }
-            if (ISPB.balde >= Number(process.env.BALDE_ISPB)) {
-                ISPB.balde = Number(process.env.BALDE_ISPB)
-            }
         }
         if (client.balde >= Number(process.env.BALDE_CNPJ)) {
             client.balde = Number(process.env.BALDE_CNPJ)

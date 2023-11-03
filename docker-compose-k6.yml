@@ -1,0 +1,54 @@
+services:
+  k6-sucess:
+    build:
+      context: .
+      dockerfile: ./Dockerfile.k6-success
+    depends_on:
+      - grafana
+      - influxdb
+    networks:
+      - application-network
+  k6-error:
+    build:
+      context: .
+      dockerfile: ./Dockerfile.k6-error
+    depends_on:
+      - grafana
+      - influxdb
+    networks:
+      - application-network
+  grafana:
+    image: grafana/grafana:main
+    container_name: grafana
+    ports:
+      - 3001:3001
+    networks:
+      - application-network
+    volumes:
+      - ./grafana-provisioning:/etc/grafana/provisioning
+      - ./grafana-provisioning/dashboards:/var/lib/grafana/dashboards
+    environment:
+      GF_SERVER_PROTOCOL: http
+      GF_SERVER_HTTP_PORT: 3001
+      GF_AUTH_ANONYMOUS_ORG_ROLE: Admin
+      GF_AUTH_ANONYMOUS_ENABLED: 1
+      GF_AUTH_BASIC_ENABLED: 0
+      GF_SERVER_SERVE_FROM_SUB_PATH: 1
+  influxdb:
+    image: influxdb:1.8
+    container_name: influxdb
+    ports:
+      - 8086:8086
+      - 8083:8083
+    networks:
+      - application-network
+    environment:
+      INFLUXDB_HTTP_AUTH_ENABLED: "false"
+      INFLUXDB_ADMIN_ENABLED: "true"
+      INFLUXDB_ADMIN_BIND_ADDRESS: ":8083"
+      INFLUXDB_ADMIN_USER_TOKEN: "admin"
+      INFLUXDB_ADMIN_USER_PASSWORD: "01d58074-d469-4645-9985-58c37b4b7ab7"
+
+networks:
+  application-network:
+    driver: bridge

@@ -1,0 +1,6 @@
+FROM grafana/k6
+
+COPY ./runner-balde-success.js ./runner-balde-success.js
+COPY ./utils ./utils
+
+CMD ["run", "--out", "influxdb=http://influxdb:8086/myk6db", "./runner-balde-success.js"]

@@ -7,19 +7,27 @@ services:
       - "3000:3000"
     environment:
       - ISPB=03311443
-      - BALDE_ISPB=300
-      - BALDE_CNPJ=100
+      - BALDE_ISPB=3000
+      - BALDE_CNPJ=1000
       - PORT=3000
       - URL=http://localhost:3000
-      - CRON=2
+      - CRON=1
+    networks:
+      - application-network
   worker:
     build:
       context: .
       dockerfile: ./Dockerfile.worker
     environment:
       - ISPB=03311443
-      - BALDE_ISPB=300
-      - BALDE_CNPJ=100
+      - BALDE_ISPB=3000
+      - BALDE_CNPJ=1000
       - PORT=3000
       - URL=http://web:3000
-      - CRON=2
+      - CRON=1
+    networks:
+      - application-network
+
+networks:
+  application-network:
+    driver: bridge
