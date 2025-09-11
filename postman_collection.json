@@ -1,0 +1,175 @@
+{
+	"info": {
+		"_postman_id": "c1e4f3b3-a5b5-4b5e-8c1c-0b1b1b1b1b1b",
+		"name": "Simulador Fichas Bacen",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Balde",
+			"item": [
+				{
+					"name": "Get Saldos",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:3000/balde/saldos",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"balde",
+								"saldos"
+							]
+						},
+						"description": "Retorna o saldo de fichas atual de todos os clientes e do ISPB."
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Chave",
+			"item": [
+				{
+					"name": "Consulta Sucesso",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:3000/chave/sucesso?walletId=469834d9-61b0-4893-81c1-94418f300e0a",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"chave",
+								"sucesso"
+							],
+							"query": [
+								{
+									"key": "walletId",
+									"value": "469834d9-61b0-4893-81c1-94418f300e0a"
+								}
+							]
+						},
+						"description": "Simula uma consulta de chave PIX bem-sucedida, consumindo 1 ficha do cliente e 1 do ISPB."
+					},
+					"response": []
+				},
+				{
+					"name": "Consulta Falha",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:3000/chave/falha?walletId=469834d9-61b0-4893-81c1-94418f300e0a",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"chave",
+								"falha"
+							],
+							"query": [
+								{
+									"key": "walletId",
+									"value": "469834d9-61b0-4893-81c1-94418f300e0a"
+								}
+							]
+						},
+						"description": "Simula uma consulta de chave PIX que falhou, consumindo 20 fichas do cliente e 3 do ISPB como penalidade."
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Pix",
+			"item": [
+				{
+					"name": "Recarga Balde",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:3000/pix/balde/recarga",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"pix",
+								"balde",
+								"recarga"
+							]
+						},
+						"description": "Executa a lógica de recarga das fichas para todos os clientes e para o ISPB. Este endpoint é chamado pelo processo agendado (cron)."
+					},
+					"response": []
+				},
+				{
+					"name": "Pix Sucesso",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:3000/pix/sucesso?walletId=469834d9-61b0-4893-81c1-94418f300e0a",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"pix",
+								"sucesso"
+							],
+							"query": [
+								{
+									"key": "walletId",
+									"value": "469834d9-61b0-4893-81c1-94418f300e0a"
+								}
+							]
+						},
+						"description": "Simula um pagamento PIX bem-sucedido. (Observação: a lógica atual consome e devolve as fichas, resultando em consumo zero)."
+					},
+					"response": []
+				},
+				{
+					"name": "Pix Falha",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:3000/pix/falha?walletId=469834d9-61b0-4893-81c1-94418f300e0a",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"pix",
+								"falha"
+							],
+							"query": [
+								{
+									"key": "walletId",
+									"value": "469834d9-61b0-4893-81c1-94418f300e0a"
+								}
+							]
+						},
+						"description": "Simula um pagamento PIX que falhou, consumindo 20 fichas do cliente e 3 do ISPB como penalidade."
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}
