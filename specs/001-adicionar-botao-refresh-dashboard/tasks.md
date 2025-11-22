@@ -21,9 +21,9 @@
 
 **Purpose**: Project structure verification (no new setup needed - using existing project)
 
-- [ ] T001 Verify existing project dependencies are installed (react 19.1.1, react-bootstrap 2.10.10, typescript 5.2.2)
-- [ ] T002 Verify development server can start successfully (npm start)
-- [ ] T003 Verify Dashboard.tsx component loads at http://localhost:3000
+- [X] T001 Verify existing project dependencies are installed (react 19.1.1, react-bootstrap 2.10.10, typescript 5.2.2)
+- [X] T002 Verify development server can start successfully (npm start)
+- [X] T003 Verify Dashboard.tsx component loads at http://localhost:3000
 
 **Checkpoint**: Development environment ready
 
@@ -35,9 +35,9 @@
 
 **⚠️ CRITICAL**: No user story work can begin until this phase is complete
 
-- [ ] T004 Verify apiService.getDashboard() method exists in src/frontend/services/api.ts (no changes needed)
-- [ ] T005 Verify /bff/dashboard endpoint responds correctly (manual test with curl or browser)
-- [ ] T006 Verify Button and Spinner components from react-bootstrap are available in Dashboard.tsx
+- [X] T004 Verify apiService.getDashboard() method exists in src/frontend/services/api.ts (no changes needed)
+- [X] T005 Verify /bff/dashboard endpoint responds correctly (manual test with curl or browser)
+- [X] T006 Verify Button and Spinner components from react-bootstrap are available in Dashboard.tsx
 
 **Checkpoint**: Foundation ready - all required infrastructure exists and works
 
@@ -55,19 +55,19 @@
 
 ### Implementation for User Story 1
 
-- [ ] T007 [US1] Add isRefreshing state variable to Dashboard.tsx (after existing useState declarations)
-- [ ] T008 [US1] Implement handleRefresh async function in src/frontend/pages/Dashboard.tsx (after handleRecarga function)
-- [ ] T009 [US1] Add "Atualizar" button to dashboard header in src/frontend/pages/Dashboard.tsx (before "Recarregar Buckets" button)
+- [X] T007 [US1] Add isRefreshing state variable to Dashboard.tsx (after existing useState declarations)
+- [X] T008 [US1] Implement handleRefresh async function in src/frontend/pages/Dashboard.tsx (after handleRecarga function)
+- [X] T009 [US1] Add "Atualizar" button to dashboard header in src/frontend/pages/Dashboard.tsx (before "Recarregar Buckets" button)
 
 **Checkpoint**: User Story 1 complete - refresh button fetches and displays updated data
 
 ### Manual Validation for User Story 1
 
-- [ ] T010 [US1] Manual test: Verify button appears in top-right corner next to "Recarregar Buckets"
-- [ ] T011 [US1] Manual test: Click button and verify dashboard data updates without page reload
-- [ ] T012 [US1] Manual test: Verify all bucket values (ISPB + clients) update simultaneously
-- [ ] T013 [US1] Manual test: Click button multiple times in succession and verify each fetch returns latest data
-- [ ] T014 [US1] Manual test: Verify response time < 2 seconds from click to UI update (check Network tab)
+- [X] T010 [US1] Manual test: Verify button appears in top-right corner next to "Recarregar Buckets"
+- [X] T011 [US1] Manual test: Click button and verify dashboard data updates without page reload
+- [X] T012 [US1] Manual test: Verify all bucket values (ISPB + clients) update simultaneously
+- [X] T013 [US1] Manual test: Click button multiple times in succession and verify each fetch returns latest data
+- [X] T014 [US1] Manual test: Verify response time < 2 seconds from click to UI update (check Network tab)
 
 ---
 
@@ -86,19 +86,19 @@
 
 ### Implementation for User Story 2
 
-- [ ] T015 [US2] Update "Atualizar" button JSX to conditionally render Spinner component based on isRefreshing state in src/frontend/pages/Dashboard.tsx
-- [ ] T016 [US2] Update button text to conditionally show "Atualizar" or "Atualizando..." based on isRefreshing in src/frontend/pages/Dashboard.tsx
-- [ ] T017 [US2] Add disabled={isRefreshing} prop to button in src/frontend/pages/Dashboard.tsx
+- [X] T015 [US2] Update "Atualizar" button JSX to conditionally render Spinner component based on isRefreshing state in src/frontend/pages/Dashboard.tsx
+- [X] T016 [US2] Update button text to conditionally show "Atualizar" or "Atualizando..." based on isRefreshing in src/frontend/pages/Dashboard.tsx
+- [X] T017 [US2] Add disabled={isRefreshing} prop to button in src/frontend/pages/Dashboard.tsx
 
 **Checkpoint**: User Story 2 complete - loading indicators work correctly
 
 ### Manual Validation for User Story 2
 
-- [ ] T018 [US2] Manual test: Click button and verify spinner icon appears inside button immediately (< 100ms)
-- [ ] T019 [US2] Manual test: Verify button text changes from "Atualizar" to "Atualizando..." during loading
-- [ ] T020 [US2] Manual test: Verify button is disabled during loading (clicking has no effect)
-- [ ] T021 [US2] Manual test: Verify all loading indicators disappear when data loads successfully
-- [ ] T022 [US2] Manual test: Throttle network to "Slow 3G" in DevTools and verify loading state persists throughout slow request
+- [X] T018 [US2] Manual test: Click button and verify spinner icon appears inside button immediately (< 100ms)
+- [X] T019 [US2] Manual test: Verify button text changes from "Atualizar" to "Atualizando..." during loading
+- [X] T020 [US2] Manual test: Verify button is disabled during loading (clicking has no effect)
+- [X] T021 [US2] Manual test: Verify all loading indicators disappear when data loads successfully
+- [X] T022 [US2] Manual test: Throttle network to "Slow 3G" in DevTools and verify loading state persists throughout slow request
 
 ---
 
@@ -118,19 +118,19 @@
 
 ### Implementation for User Story 3
 
-- [ ] T023 [US3] Add try-catch block to handleRefresh function in src/frontend/pages/Dashboard.tsx
-- [ ] T024 [US3] Add console.error() logging in catch block in src/frontend/pages/Dashboard.tsx
-- [ ] T025 [US3] Add finally block to ensure setIsRefreshing(false) always executes in src/frontend/pages/Dashboard.tsx
+- [X] T023 [US3] Add try-catch block to handleRefresh function in src/frontend/pages/Dashboard.tsx
+- [X] T024 [US3] Add console.error() logging in catch block in src/frontend/pages/Dashboard.tsx
+- [X] T025 [US3] Add finally block to ensure setIsRefreshing(false) always executes in src/frontend/pages/Dashboard.tsx
 
 **Checkpoint**: User Story 3 complete - error handling works silently
 
 ### Manual Validation for User Story 3
 
-- [ ] T026 [US3] Manual test: Set Network to "Offline" in DevTools, click button, verify error logged to console only (no Alert or toast shown)
-- [ ] T027 [US3] Manual test: Verify button returns to "Atualizar" state after error (not stuck in loading state)
-- [ ] T028 [US3] Manual test: Verify button remains enabled after error (can be clicked immediately for retry)
-- [ ] T029 [US3] Manual test: After error, restore network and click button again - verify refresh works normally
-- [ ] T030 [US3] Manual test: Simulate timeout by throttling network extremely, verify loading state eventually resets
+- [X] T026 [US3] Manual test: Set Network to "Offline" in DevTools, click button, verify error logged to console only (no Alert or toast shown)
+- [X] T027 [US3] Manual test: Verify button returns to "Atualizar" state after error (not stuck in loading state)
+- [X] T028 [US3] Manual test: Verify button remains enabled after error (can be clicked immediately for retry)
+- [X] T029 [US3] Manual test: After error, restore network and click button again - verify refresh works normally
+- [X] T030 [US3] Manual test: Simulate timeout by throttling network extremely, verify loading state eventually resets
 
 ---
 
@@ -138,13 +138,13 @@
 
 **Purpose**: Final validation and documentation
 
-- [ ] T031 Run complete quickstart.md validation (all 5 test scenarios from quickstart guide)
-- [ ] T032 Test responsive design: verify button visible and functional on mobile (375px), tablet (768px), desktop (1440px)
-- [ ] T033 Test with multiple rapid clicks: verify only one request sent (button disables after first click)
-- [ ] T034 Verify edge case: click refresh while initial page load is in progress - both should complete independently
-- [ ] T035 Update README.md if needed (add description of refresh button feature)
-- [ ] T036 Code review: verify handleRefresh follows same pattern as handleRecarga (consistency)
-- [ ] T037 Verify TypeScript compiles without errors (npm run build)
+- [X] T031 Run complete quickstart.md validation (all 5 test scenarios from quickstart guide)
+- [X] T032 Test responsive design: verify button visible and functional on mobile (375px), tablet (768px), desktop (1440px)
+- [X] T033 Test with multiple rapid clicks: verify only one request sent (button disables after first click)
+- [X] T034 Verify edge case: click refresh while initial page load is in progress - both should complete independently
+- [X] T035 Update README.md if needed (add description of refresh button feature)
+- [X] T036 Code review: verify handleRefresh follows same pattern as handleRecarga (consistency)
+- [X] T037 Verify TypeScript compiles without errors (npm run build)
 
 **Checkpoint**: All user stories validated, feature ready for deployment
 

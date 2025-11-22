@@ -21,6 +21,7 @@ const Dashboard = () => {
   const [dashboardData, setDashboardData] = useState<DashboardData | null>(null)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
+  const [isRefreshing, setIsRefreshing] = useState(false)
 
   useEffect(() => {
     const fetchData = async () => {
@@ -56,6 +57,18 @@ const Dashboard = () => {
     }
   }
 
+  const handleRefresh = async () => {
+    try {
+      setIsRefreshing(true)
+      const data = await apiService.getDashboard()
+      setDashboardData(data)
+    } catch (err) {
+      console.error('Error refreshing dashboard:', err)
+    } finally {
+      setIsRefreshing(false)
+    }
+  }
+
   if (loading && !dashboardData) {
     return (
       <div className="d-flex justify-content-center align-items-center" style={{ height: '200px' }}>
@@ -78,26 +91,48 @@ const Dashboard = () => {
     <div>
       <div className="d-flex justify-content-between align-items-center mb-4">
         <h1>Dashboard de Buckets</h1>
-        <Button 
-          variant="primary" 
-          onClick={handleRecarga}
-          disabled={loading}
-        >
-          {loading ? (
-            <>
-              <Spinner
-                as="span"
-                animation="border"
-                size="sm"
-                role="status"
-                aria-hidden="true"
-              />{' '}
-              Recarregando...
-            </>
-          ) : (
-            'Recarregar Buckets'
-          )}
-        </Button>
+        <div className="d-flex gap-2">
+          <Button 
+            variant="outline-primary" 
+            onClick={handleRefresh}
+            disabled={isRefreshing}
+          >
+            {isRefreshing ? (
+              <>
+                <Spinner
+                  as="span"
+                  animation="border"
+                  size="sm"
+                  role="status"
+                  aria-hidden="true"
+                />{' '}
+                Atualizando...
+              </>
+            ) : (
+              'Atualizar'
+            )}
+          </Button>
+          <Button 
+            variant="primary" 
+            onClick={handleRecarga}
+            disabled={loading}
+          >
+            {loading ? (
+              <>
+                <Spinner
+                  as="span"
+                  animation="border"
+                  size="sm"
+                  role="status"
+                  aria-hidden="true"
+                />{' '}
+                Recarregando...
+              </>
+            ) : (
+              'Recarregar Buckets'
+            )}
+          </Button>
+        </div>
       </div>
 
       <Row>

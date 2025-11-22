@@ -2,6 +2,22 @@
 
 Esta API foi desenvolvida exclusivamente para simular cenários de transações e consultas no DICT (Diretório de Identificadores de Contas Transacionais). Não realiza transações ou consultas reais, mas simula o comportamento das regras de limitação de consultas.
 
+## 🚀 Quick Start
+
+**Para executar o projeto completo:**
+
+```bash
+./start-all.sh
+```
+
+Ou veja o guia completo em [COMO_EXECUTAR.md](./COMO_EXECUTAR.md)
+
+**Para verificar se está funcionando:**
+
+```bash
+./check-status.sh
+```
+
 ## Interface Web (Frontend)
 
 A aplicação agora inclui uma interface web moderna e responsiva desenvolvida com React e Bootstrap. Para acessar o frontend, inicie o servidor e acesse `http://localhost:3000` no seu navegador.
