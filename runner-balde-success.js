@@ -52,7 +52,9 @@ export default function () {
         group('GET KEY SUCCESS', function () {
             const res = http.get(`${url}/chave/sucesso?walletId=${walletRandom(arrayWallets)}`, JSON.stringify({}), params)
             const status = check(res, { 'status was 201': (r) => r.status == 201 })
-            console.log(`GET KEY SUCCESS Status:${res.status} `)
+            if (!status) {
+                console.log(`GET KEY SUCCESS Status:${res.status} `)
+            }
         })
 
         //     group('GET KEY SUCCESS', function () {
