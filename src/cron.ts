@@ -15,7 +15,7 @@ async function execute(): Promise<void> {
 }
 
 const job = new CronJob(`0 */${process.env.CRON} * * * *`, async () => {
-    execute()
+    await execute()
     console.log(`cron running a task every ${process.env.CRON} minutes`)
 }, null, true, 'America/Sao_Paulo')
 
