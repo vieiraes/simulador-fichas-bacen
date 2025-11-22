@@ -1,5 +1,6 @@
 import { CronJob } from 'cron'
 import axios from 'axios'
+import { clientWallets } from './api/models/wallets.model'
 require('dotenv').config()
 
 

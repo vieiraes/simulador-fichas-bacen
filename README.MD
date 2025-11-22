@@ -2,44 +2,55 @@
 
 Esta API foi desenvolvida exclusivamente para simular cenários de transações e consultas no DICT (Diretório de Identificadores de Contas Transacionais). Não realiza transações ou consultas reais, mas simula o comportamento das regras de limitação de consultas.
 
-## Rotas
+## Interface Web (Frontend)
 
-### `/saldos`
+A aplicação agora inclui uma interface web moderna e responsiva desenvolvida com React e Bootstrap. Para acessar o frontend, inicie o servidor e acesse `http://localhost:3000` no seu navegador.
+
+### Funcionalidades do Frontend:
+- Dashboard com visualização dos saldos dos baldes
+- Formulários para simular transações PIX (sucesso e falha)
+- Formulários para simular consultas de chaves (sucesso e falha)
+- Recarga automática dos baldes
+- Indicadores visuais de status operacional
+
+## Rotas da API
+
+### `/balde/saldos`
 
 - **Método**: GET
 - **Descrição**: Retorna os saldos dos baldes dos clientes e do ISPB.
 - **Exemplo**:
   ```http
-  GET /saldos
+  GET /balde/saldos
   ```
 
-### `/sucesso`
+### `/chave/sucesso`
 
 - **Método**: GET
 - **Descrição**: Simula uma consulta de chave bem-sucedida, desde que os saldos dos baldes permitam.
 - **Parâmetros**: walletId (ID da wallet que realiza a consulta)
 - **Exemplo**:
   ```http
-  GET /sucesso?walletId=12345
+  GET /chave/sucesso?walletId=12345
   ```
 
-### `/falha`
+### `/chave/falha`
 
 - **Método**: GET
 - **Descrição**: Simula uma consulta de chave que não foi encontrada, desde que os saldos dos baldes permitam.
 - **Parâmetros**: walletId (ID da wallet que realiza a consulta)
 - **Exemplo**:
   ```http
-  GET /falha?walletId=12345
+  GET /chave/falha?walletId=12345
   ```
 
-### `/balde/recarga`
+### `/pix/balde/recarga`
 
 - **Método**: POST
 - **Descrição**: Simula a recarga dos saldos dos baldes dos clientes e do ISPB.
 - **Exemplo**:
   ```http
-  POST /balde/recarga
+  POST /pix/balde/recarga
   ```
 
 ### `/pix/sucesso`
@@ -62,6 +73,66 @@ Esta API foi desenvolvida exclusivamente para simular cenários de transações 
   POST /pix/falha?walletId=12345
   ```
 
+## Rotas BFF (Backend for Frontend)
+
+### `/bff/dashboard`
+
+- **Método**: GET
+- **Descrição**: Retorna os saldos dos baldes formatados para exibição no frontend.
+- **Exemplo**:
+  ```http
+  GET /bff/dashboard
+  ```
+
+### `/bff/chave/sucesso`
+
+- **Método**: GET
+- **Descrição**: Simula uma consulta de chave bem-sucedida através do BFF.
+- **Parâmetros**: walletId (ID da wallet que realiza a consulta)
+- **Exemplo**:
+  ```http
+  GET /bff/chave/sucesso?walletId=12345
+  ```
+
+### `/bff/chave/falha`
+
+- **Método**: GET
+- **Descrição**: Simula uma consulta de chave que não foi encontrada através do BFF.
+- **Parâmetros**: walletId (ID da wallet que realiza a consulta)
+- **Exemplo**:
+  ```http
+  GET /bff/chave/falha?walletId=12345
+  ```
+
+### `/bff/pix/sucesso`
+
+- **Método**: POST
+- **Descrição**: Simula uma transação de Pix bem-sucedida através do BFF.
+- **Parâmetros**: walletId (ID da wallet que realiza a transação)
+- **Exemplo**:
+  ```http
+  POST /bff/pix/sucesso?walletId=12345
+  ```
+
+### `/bff/pix/falha`
+
+- **Método**: POST
+- **Descrição**: Simula uma transação de Pix que falhou através do BFF.
+- **Parâmetros**: walletId (ID da wallet que realiza a transação)
+- **Exemplo**:
+  ```http
+  POST /bff/pix/falha?walletId=12345
+  ```
+
+### `/bff/recarga`
+
+- **Método**: POST
+- **Descrição**: Simula a recarga dos saldos dos baldes através do BFF.
+- **Exemplo**:
+  ```http
+  POST /bff/recarga
+  ```
+
 ## Worker de Recarga
 
 Este worker executa a tarefa de recarregar os saldos dos baldes em intervalos regulares, simulando a recarga de fichas.
@@ -69,7 +140,6 @@ Este worker executa a tarefa de recarregar os saldos dos baldes em intervalos re
 - **Intervalo de Execução**: A cada 2 segundos.
 
 Lembre-se de que esta API é exclusivamente para fins de simulação e não realiza transações ou consultas reais. Ela é destinada a testes e cenários de treinamento. Certifique-se de adaptar a documentação e os exemplos de uso conforme necessário para seu ambiente de desenvolvimento.
-
 
 # Inicializando o Projeto
 
@@ -82,11 +152,13 @@ Siga estes passos para iniciar o projeto:
 ## Comandos Disponíveis
 
 - `npm run build`: Compila o código TypeScript.
+- `npm run build:frontend`: Compila o frontend React.
 - `npm run worker`: Inicia o worker de recarga de fichas.
 - `npm run server`: Inicia o servidor da API.
 - `npm start`: Inicia ambos worker e servidor.
 - `npm run dev:worker`: Inicia o worker em modo de desenvolvimento.
 - `npm run dev:server`: Inicia o servidor em modo de desenvolvimento.
+- `npm run dev:frontend`: Inicia o frontend em modo de desenvolvimento.
 
 Lembre-se de configurar o arquivo `.env` conforme necessário.
 

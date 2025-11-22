@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import { PixController, ChavesController, BaldesController } from './controllers';
+import { PixController, ChavesController, BaldesController } from './api/controllers';
 
 const router = Router();
 
