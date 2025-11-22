@@ -40,7 +40,7 @@ Como usuário, preciso ver um indicador visual claro quando o sistema está busc
 
 **Manual Validation Scenarios**:
 
-1. **Given** usuário clica no botão refresh, **When** requisição está em andamento, **Then** botão mostra estado de loading (ex: spinner ou texto "Atualizando...")
+1. **Given** usuário clica no botão refresh, **When** requisição está em andamento, **Then** botão mostra spinner icon e texto "Atualizando..."
 2. **Given** requisição de refresh está em andamento, **When** usuário tenta clicar novamente, **Then** botão está desabilitado para evitar múltiplas requisições simultâneas
 3. **Given** dados foram carregados com sucesso, **When** loading termina, **Then** botão volta ao estado normal e dados atualizados são exibidos
 
@@ -48,17 +48,17 @@ Como usuário, preciso ver um indicador visual claro quando o sistema está busc
 
 ### User Story 3 - Tratamento de Erros de Conexão (Priority: P3)
 
-Como usuário, preciso ser informado quando a atualização falha, para entender que os dados na tela podem não estar atualizados e tentar novamente.
+Como sistema, devo tratar falhas de atualização de forma silenciosa e permitir que o usuário tente novamente sem interrupções.
 
-**Why this priority**: Importante para robustez, mas ocorre apenas em cenários de falha. O happy path (P1 e P2) já entrega valor substancial.
+**Why this priority**: O botão pode ser clicado múltiplas vezes, então falhas devem ser tratadas silenciosamente sem notificações que possam acumular ou interromper o fluxo.
 
 **Manual Validation Method**: Simular falha de rede no browser (DevTools → Network → Offline) e tentar refresh
 
 **Manual Validation Scenarios**:
 
-1. **Given** conexão com backend está indisponível, **When** usuário clica refresh, **Then** sistema exibe mensagem de erro clara (ex: "Não foi possível atualizar. Tente novamente.")
-2. **Given** erro de atualização ocorreu, **When** usuário clica refresh novamente com conexão restaurada, **Then** dados são atualizados normalmente e mensagem de erro desaparece
-3. **Given** timeout na requisição, **When** tempo limite é excedido, **Then** loading para e usuário recebe feedback de erro
+1. **Given** conexão com backend está indisponível, **When** usuário clica refresh, **Then** botão retorna ao estado normal sem exibir erro (permite nova tentativa)
+2. **Given** erro de atualização ocorreu, **When** usuário clica refresh novamente com conexão restaurada, **Then** dados são atualizados normalmente
+3. **Given** timeout na requisição, **When** tempo limite é excedido, **Then** loading para e botão retorna ao estado normal silenciosamente
 
 ---
 
@@ -72,12 +72,12 @@ Como usuário, preciso ser informado quando a atualização falha, para entender
 
 ### Functional Requirements
 
-- **FR-001**: Sistema DEVE adicionar um botão visível no dashboard para solicitar atualização dos dados de balde
+- **FR-001**: Sistema DEVE adicionar um botão visível no canto superior direito do dashboard para solicitar atualização dos dados de balde
 - **FR-002**: Sistema DEVE buscar dados atualizados do endpoint BFF `/bff/dashboard` quando botão for clicado
 - **FR-003**: Sistema DEVE atualizar a interface com os novos valores de balde (ISPB e todos os clientes) após receber resposta
-- **FR-004**: Sistema DEVE exibir indicador visual durante o carregamento (botão em estado loading)
+- **FR-004**: Sistema DEVE exibir indicador visual durante o carregamento usando spinner icon dentro do botão com mudança de texto ("Atualizar" → "Atualizando...")
 - **FR-005**: Sistema DEVE desabilitar o botão durante requisição para evitar cliques duplicados
-- **FR-006**: Sistema DEVE exibir mensagem de erro ao usuário quando atualização falhar
+- **FR-006**: Sistema DEVE tratar falhas de atualização silenciosamente (sem exibir mensagem de erro ao usuário)
 - **FR-007**: Sistema DEVE manter a atualização automática do cron independente (não deve interferir com refresh manual)
 - **FR-008**: Sistema DEVE preservar o estado atual da página (não fazer reload completo) durante refresh
 
@@ -91,6 +91,16 @@ Como usuário, preciso ser informado quando a atualização falha, para entender
   - Atributos: valor do balde ISPB, array de clientes com seus respectivos baldes
   - Relação: Retornado pelo endpoint `/bff/dashboard`, exibido no dashboard
 
+## Clarifications
+
+### Session 2025-11-22
+
+- Q: Where should the refresh button be positioned in the dashboard? → A: Top-right corner of the dashboard (standard action button placement)
+- Q: What type of loading indicator should be displayed when the refresh is in progress? → A: Spinner icon + text change ("Atualizar" → "Atualizando...")
+- Q: How should error messages be displayed when the refresh fails? → A: Sem notificações ou toast (botão será clicado múltiplas vezes, sem necessidade de feedback de erro)
+- Q: What timeout duration should be set for the refresh request? → A: Not necessary (no custom timeout configuration)
+- Q: When the refresh button is clicked, what scope of data should be updated? → A: Only update dashboard display data (fetch from `/bff/dashboard`)
+
 ## Success Criteria *(mandatory)*
 
 ### Measurable Outcomes
@@ -99,4 +109,4 @@ Como usuário, preciso ser informado quando a atualização falha, para entender
 - **SC-002**: Sistema responde ao clique do botão com feedback visual imediato (menos de 100ms para mostrar loading)
 - **SC-003**: 100% das atualizações bem-sucedidas refletem os valores mais recentes disponíveis no backend
 - **SC-004**: Usuários conseguem identificar claramente quando atualização está em andamento através de indicador visual
-- **SC-005**: Em caso de falha de conexão, usuário recebe mensagem de erro clara e pode tentar novamente sem recarregar a página
+- **SC-005**: Em caso de falha de conexão, botão retorna ao estado normal silenciosamente e permite nova tentativa imediata sem recarregar a página
