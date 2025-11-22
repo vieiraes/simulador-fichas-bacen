@@ -23,11 +23,18 @@ Ou veja o guia completo em [COMO_EXECUTAR.md](./COMO_EXECUTAR.md)
 A aplicação agora inclui uma interface web moderna e responsiva desenvolvida com React e Bootstrap. Para acessar o frontend, inicie o servidor e acesse `http://localhost:3000` no seu navegador.
 
 ### Funcionalidades do Frontend:
-- Dashboard com visualização dos saldos dos baldes
-- Formulários para simular transações PIX (sucesso e falha)
-- Formulários para simular consultas de chaves (sucesso e falha)
-- Recarga automática dos baldes
-- Indicadores visuais de status operacional
+- **Dashboard com visualização dos saldos dos baldes**
+  - Exibição em tempo real dos saldos de clientes e ISPB
+  - Gráficos de progresso dos baldes
+  - Indicadores visuais de status operacional
+- **Botão de Atualizar (Refresh)** 🆕
+  - Atualiza os dados do dashboard sem recarregar a página
+  - Indicadores visuais de carregamento (spinner + texto)
+  - Tratamento silencioso de erros (logs no console)
+  - Tempo de resposta < 2 segundos
+- **Formulários para simular transações PIX** (sucesso e falha)
+- **Formulários para simular consultas de chaves** (sucesso e falha)
+- **Recarga automática dos baldes** via worker em background
 
 ## Rotas da API
 
