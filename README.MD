@@ -27,6 +27,10 @@ A aplicação agora inclui uma interface web moderna e responsiva desenvolvida c
   - Exibição em tempo real dos saldos de clientes e ISPB
   - Gráficos de progresso dos baldes
   - Indicadores visuais de status operacional
+- **Download da Postman Collection** 🆕
+  - Botão com ícone para download da collection completa
+  - Arquivo pronto para importar no Postman
+  - Todas as rotas da API documentadas e prontas para teste
 - **Botão de Atualizar (Refresh)** 🆕
   - Atualiza os dados do dashboard sem recarregar a página
   - Indicadores visuais de carregamento (spinner + texto)
