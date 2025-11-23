@@ -22,6 +22,8 @@ Ou veja o guia completo em [COMO_EXECUTAR.md](./COMO_EXECUTAR.md)
 
 A aplicação agora inclui uma interface web moderna e responsiva desenvolvida com React e Bootstrap. Para acessar o frontend, inicie o servidor e acesse `http://localhost:3000` no seu navegador.
 
+![Exemplo da Interface](./utils/example-screen.png)
+
 ### Funcionalidades do Frontend:
 - **Dashboard com visualização dos saldos dos baldes**
   - Exibição em tempo real dos saldos de clientes e ISPB
