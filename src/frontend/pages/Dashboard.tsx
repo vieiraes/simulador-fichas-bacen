@@ -1,72 +1,28 @@
-import React, { useState, useEffect } from 'react'
-import { Card, Row, Col, Button, Spinner, Alert } from 'react-bootstrap'
-import apiService from '../services/api'
-
-interface Wallet {
-  id: string
-  balde: number
-}
-
-interface ISPB {
-  ISPB: string
-  balde: number
-}
-
-interface DashboardData {
-  clients: Wallet[]
-  ispb: ISPB
-}
+import React, { useState } from 'react'
+import { Card, Row, Col, Button, Alert, Accordion, Form } from 'react-bootstrap'
+import { useSimulation } from '../context/SimulationContext'
 
 const Dashboard = () => {
-  const [dashboardData, setDashboardData] = useState<DashboardData | null>(null)
-  const [loading, setLoading] = useState(true)
+  const { data: dashboardData, recargaBuckets, pixSucesso, pixFalha, chaveSucesso, chaveFalha } = useSimulation()
   const [error, setError] = useState<string | null>(null)
-  const [isRefreshing, setIsRefreshing] = useState(false)
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        setLoading(true)
-        const data = await apiService.getDashboard()
-        setDashboardData(data)
-        setError(null)
-      } catch (err) {
-        setError('Erro ao carregar dados do dashboard')
-        console.error(err)
-      } finally {
-        setLoading(false)
-      }
-    }
+  // Estados compartilhados para as simulações
+  const [selectedWallet, setSelectedWallet] = useState('')
+  const [simResult, setSimResult] = useState<any>(null)
+  const [simError, setSimError] = useState<string | null>(null)
 
-    fetchData()
-  }, [])
-
-  const handleRecarga = async () => {
+  const handleRecarga = () => {
     try {
-      setLoading(true)
-      await apiService.recargaBuckets()
-      // Recarregar os dados após a recarga
-      const data = await apiService.getDashboard()
-      setDashboardData(data)
+      recargaBuckets()
       setError(null)
     } catch (err) {
       setError('Erro ao recarregar buckets')
       console.error(err)
-    } finally {
-      setLoading(false)
     }
   }
 
-  const handleRefresh = async () => {
-    try {
-      setIsRefreshing(true)
-      const data = await apiService.getDashboard()
-      setDashboardData(data)
-    } catch (err) {
-      console.error('Error refreshing dashboard:', err)
-    } finally {
-      setIsRefreshing(false)
-    }
+  const handleRefresh = () => {
+    // React atualiza sozinho
   }
 
   const handleDownloadCollection = () => {
@@ -78,14 +34,21 @@ const Dashboard = () => {
     document.body.removeChild(link)
   }
 
-  if (loading && !dashboardData) {
-    return (
-      <div className="d-flex justify-content-center align-items-center" style={{ height: '200px' }}>
-        <Spinner animation="border" role="status">
-          <span className="visually-hidden">Carregando...</span>
-        </Spinner>
-      </div>
-    )
+  const runSimulation = (e: React.FormEvent, action: Function, actionName: string) => {
+    e.preventDefault()
+    if (!selectedWallet) {
+      setSimError('Por favor, selecione uma wallet')
+      return
+    }
+
+    try {
+      setSimError(null)
+      const response = action(selectedWallet)
+      setSimResult({ ...response, actionName })
+    } catch (err: any) {
+      setSimError(err.response?.data?.message || err.message || `Erro ao processar ${actionName}`)
+      setSimResult(null)
+    }
   }
 
   if (error) {
@@ -95,6 +58,8 @@ const Dashboard = () => {
   if (!dashboardData) {
     return <Alert variant="warning">Nenhum dado disponível</Alert>
   }
+
+  const wallets = dashboardData.clients.map((c, i) => ({ id: c.id, name: `Cliente ${i + 1}` }))
 
   return (
     <div>
@@ -115,42 +80,14 @@ const Dashboard = () => {
           <Button 
             variant="outline-primary" 
             onClick={handleRefresh}
-            disabled={isRefreshing}
           >
-            {isRefreshing ? (
-              <>
-                <Spinner
-                  as="span"
-                  animation="border"
-                  size="sm"
-                  role="status"
-                  aria-hidden="true"
-                />{' '}
-                Atualizando...
-              </>
-            ) : (
-              'Atualizar'
-            )}
+            Atualizar
           </Button>
           <Button 
             variant="primary" 
             onClick={handleRecarga}
-            disabled={loading}
           >
-            {loading ? (
-              <>
-                <Spinner
-                  as="span"
-                  animation="border"
-                  size="sm"
-                  role="status"
-                  aria-hidden="true"
-                />{' '}
-                Recarregando...
-              </>
-            ) : (
-              'Recarregar Buckets'
-            )}
+            Recarregar Buckets
           </Button>
         </div>
       </div>
@@ -214,9 +151,6 @@ const Dashboard = () => {
                         className="progress-bar" 
                         role="progressbar" 
                         style={{ width: `${(dashboardData.clients[0].balde / 100) * 100}%` }}
-                        aria-valuenow={dashboardData.clients[0].balde}
-                        aria-valuemin={0}
-                        aria-valuemax={100}
                       >
                         {dashboardData.clients[0].balde}%
                       </div>
@@ -233,9 +167,6 @@ const Dashboard = () => {
                         className="progress-bar bg-success" 
                         role="progressbar" 
                         style={{ width: `${(dashboardData.ispb.balde / 300) * 100}%` }}
-                        aria-valuenow={dashboardData.ispb.balde}
-                        aria-valuemin={0}
-                        aria-valuemax={300}
                       >
                         {Math.round((dashboardData.ispb.balde / 300) * 100)}%
                       </div>
@@ -258,6 +189,87 @@ const Dashboard = () => {
                   </div>
                 </Col>
               </Row>
+            </Card.Body>
+          </Card>
+        </Col>
+      </Row>
+
+      <Row className="mt-4">
+        <Col>
+          <Card>
+            <Card.Header>
+              <h3>Simulador de Operações</h3>
+            </Card.Header>
+            <Card.Body>
+              <Form.Group className="mb-4">
+                <Form.Label><strong>Selecione a Wallet (Cliente) para simular:</strong></Form.Label>
+                <Form.Select 
+                  value={selectedWallet} 
+                  onChange={(e) => {
+                    setSelectedWallet(e.target.value)
+                    setSimResult(null)
+                    setSimError(null)
+                  }}
+                >
+                  <option value="">Escolha uma wallet</option>
+                  {wallets.map(wallet => (
+                    <option key={wallet.id} value={wallet.id}>
+                      {wallet.name} - {wallet.id.substring(0, 8)}...
+                    </option>
+                  ))}
+                </Form.Select>
+              </Form.Group>
+
+              {simError && <Alert variant="danger">{simError}</Alert>}
+              
+              {simResult && (
+                <Alert variant={simResult.message.includes('sucesso') || simResult.message.includes('encontrada') ? 'success' : 'danger'}>
+                  <h5>Resultado ({simResult.actionName}):</h5>
+                  <p><strong>Mensagem:</strong> {simResult.message}</p>
+                  {simResult.wallet && <p><strong>Bucket Cliente:</strong> {simResult.wallet.balde} fichas</p>}
+                  {simResult.wallets && <p><strong>Bucket Cliente:</strong> {simResult.wallets.balde} fichas</p>}
+                  {simResult.ispb !== undefined && <p><strong>Bucket ISPB:</strong> {simResult.ispb} fichas</p>}
+                </Alert>
+              )}
+
+              <Accordion>
+                <Accordion.Item eventKey="0">
+                  <Accordion.Header>PIX - Sucesso</Accordion.Header>
+                  <Accordion.Body>
+                    <p>Simula uma transação PIX bem-sucedida, consumindo 1 ficha do ISPB e 10 fichas do Cliente.</p>
+                    <Button variant="success" onClick={(e) => runSimulation(e, pixSucesso, 'PIX Sucesso')} disabled={!selectedWallet}>
+                      Executar Transação
+                    </Button>
+                  </Accordion.Body>
+                </Accordion.Item>
+                <Accordion.Item eventKey="1">
+                  <Accordion.Header>PIX - Falha</Accordion.Header>
+                  <Accordion.Body>
+                    <p>Simula uma transação PIX que falha (ex: saldo insuficiente). Consome 1 ficha do ISPB, mas não consome do Cliente.</p>
+                    <Button variant="danger" onClick={(e) => runSimulation(e, pixFalha, 'PIX Falha')} disabled={!selectedWallet}>
+                      Executar Transação
+                    </Button>
+                  </Accordion.Body>
+                </Accordion.Item>
+                <Accordion.Item eventKey="2">
+                  <Accordion.Header>Consulta Chave - Sucesso</Accordion.Header>
+                  <Accordion.Body>
+                    <p>Simula a consulta de uma chave PIX com sucesso. Consome apenas 1 ficha do Cliente (ISPB não é cobrado).</p>
+                    <Button variant="success" onClick={(e) => runSimulation(e, chaveSucesso, 'Consulta Chave Sucesso')} disabled={!selectedWallet}>
+                      Executar Consulta
+                    </Button>
+                  </Accordion.Body>
+                </Accordion.Item>
+                <Accordion.Item eventKey="3">
+                  <Accordion.Header>Consulta Chave - Falha</Accordion.Header>
+                  <Accordion.Body>
+                    <p>Simula a consulta de uma chave PIX inexistente. Consome apenas 1 ficha do Cliente (ISPB não é cobrado).</p>
+                    <Button variant="danger" onClick={(e) => runSimulation(e, chaveFalha, 'Consulta Chave Falha')} disabled={!selectedWallet}>
+                      Executar Consulta
+                    </Button>
+                  </Accordion.Body>
+                </Accordion.Item>
+              </Accordion>
             </Card.Body>
           </Card>
         </Col>
