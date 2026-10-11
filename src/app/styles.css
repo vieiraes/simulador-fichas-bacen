@@ -1,0 +1,55 @@
+:root {
+  --bg: #f4f6fb; --card: #ffffff; --fg: #0f172a; --muted: #4b5568; --line: #d9dfeb;
+  --primary: #0b5cad; --ok: #15703d; --warn: #9a5b00; --err: #b42318; --pix: #32bcad;
+  font-family: Inter, system-ui, -apple-system, 'Segoe UI', sans-serif; color: var(--fg); background: var(--bg);
+}
+* { box-sizing: border-box; }
+body { margin: 0; }
+.page { max-width: 1100px; margin: 0 auto; padding: 16px; }
+.hero h1 { margin: 8px 0; font-size: clamp(1.5rem, 4vw, 2.2rem); }
+.hero h1::before { content: ''; display: inline-block; width: 0.7em; height: 0.7em; margin-right: 10px; background: var(--pix); transform: rotate(45deg); border-radius: 3px; }
+.hero p { color: var(--muted); max-width: 70ch; line-height: 1.5; }
+.panel { background: var(--card); border: 1px solid var(--line); border-radius: 12px; padding: 16px; margin: 16px 0; }
+.panel h2 { margin: 0 0 12px; font-size: 1.15rem; }
+.fields { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 12px; }
+label { display: flex; flex-direction: column; gap: 6px; font-weight: 600; font-size: 0.9rem; }
+select { font: inherit; padding: 8px 10px; border-radius: 8px; border: 1px solid var(--line); background: #fff; min-height: 40px; }
+.actions { display: flex; flex-wrap: wrap; gap: 10px; }
+button { font: inherit; font-weight: 600; border: 0; border-radius: 8px; padding: 10px 14px; min-height: 44px; background: var(--primary); color: #fff; cursor: pointer; }
+button.warn { background: var(--warn); }
+button.ok { background: var(--ok); }
+button.ghost { background: transparent; color: var(--fg); border: 1px solid var(--line); }
+button:disabled { opacity: 0.5; cursor: not-allowed; }
+button:focus-visible, select:focus-visible, a:focus-visible { outline: 3px solid #f59e0b; outline-offset: 2px; }
+.buckets { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 12px; }
+.gauge { background: var(--card); border: 2px dashed var(--line); border-radius: 12px; padding: 14px; }
+.gauge.active { border-style: solid; border-color: var(--primary); box-shadow: 0 0 0 3px rgba(11, 92, 173, 0.15); }
+.gauge h3 { margin: 0; font-size: 1rem; }
+.policy { margin: 4px 0; font-size: 0.75rem; color: var(--muted); overflow-wrap: anywhere; }
+.tokens { margin: 8px 0; font-size: 2rem; font-weight: 800; font-variant-numeric: tabular-nums; }
+.tokens small { font-size: 0.9rem; color: var(--muted); font-weight: 600; }
+.bar { height: 12px; background: #e6eaf2; border-radius: 99px; overflow: hidden; }
+.bar > div { height: 100%; background: var(--ok); transition: width 0.25s; }
+.gauge.low .bar > div { background: var(--warn); }
+.gauge.empty { border-color: var(--err); }
+.gauge.empty .bar > div { background: var(--err); }
+.refill { margin: 8px 0 0; font-size: 0.85rem; color: var(--muted); }
+.refill strong { color: var(--err); }
+.log { list-style: none; padding: 0; margin: 0; display: grid; gap: 8px; max-height: 360px; overflow: auto; }
+.log li { display: grid; grid-template-columns: 76px 1fr auto; gap: 10px; align-items: center; padding: 8px 10px; border-radius: 8px; border-left: 5px solid; background: #f8fafc; font-size: 0.9rem; overflow-wrap: anywhere; }
+.log li.ok { border-color: var(--ok); } .log li.warn { border-color: var(--warn); } .log li.err { border-color: var(--err); }
+.status { font-weight: 800; font-variant-numeric: tabular-nums; }
+.log li.ok .status { color: var(--ok); } .log li.warn .status { color: var(--warn); } .log li.err .status { color: var(--err); }
+.log time { color: var(--muted); font-size: 0.8rem; }
+.muted { color: var(--muted); font-size: 0.9rem; }
+.table-wrap { overflow-x: auto; }
+table { border-collapse: collapse; width: 100%; min-width: 520px; font-size: 0.92rem; }
+caption { text-align: left; color: var(--muted); padding-bottom: 6px; }
+th, td { border-bottom: 1px solid var(--line); padding: 8px; text-align: left; }
+td { font-variant-numeric: tabular-nums; }
+.notes { line-height: 1.6; }
+code { font-size: 0.85em; overflow-wrap: anywhere; }
+a { color: var(--primary); }
+.foot { text-align: center; padding: 16px 0 32px; }
+@media (max-width: 520px) { .log li { grid-template-columns: 56px 1fr; } .log time { grid-column: 2; } }
+@media (prefers-reduced-motion: reduce) { .bar > div { transition: none; } }

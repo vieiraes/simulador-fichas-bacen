@@ -1,33 +1,11 @@
-import { defineConfig } from 'vite'
-import react from '@vitejs/plugin-react'
-import { resolve } from 'path'
+import { defineConfig } from 'vite';
+import react from '@vitejs/plugin-react';
 
-// https://vitejs.dev/config/
+// BASE_PATH permite publicar num subcaminho (ex.: GitHub Pages em /simulador-fichas-bacen/).
 export default defineConfig({
+  base: process.env.BASE_PATH ?? '/',
   plugins: [react()],
-  build: {
-    outDir: 'frontend-build',
-    emptyOutDir: true,
-    rollupOptions: {
-      output: {
-        manualChunks: {
-          vendor: ['react', 'react-dom', 'react-router-dom'],
-          bootstrap: ['bootstrap', 'react-bootstrap']
-        }
-      }
-    },
-    chunkSizeWarningLimit: 1000
-  },
-  server: {
-    port: 3001,
-    proxy: {
-      '/api': 'http://localhost:3000',
-      '/bff': 'http://localhost:3000'
-    }
-  },
-  resolve: {
-    alias: {
-      '@': resolve(__dirname, 'src/frontend')
-    }
-  }
-})
+  build: { outDir: 'dist' },
+  server: { port: 3001 },
+  preview: { port: 4173 },
+});

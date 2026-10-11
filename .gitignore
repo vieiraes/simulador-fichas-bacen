@@ -35,3 +35,8 @@ pnpm-debug.log*
 
 # OS files
 Thumbs.db
+# Testes
+coverage/
+playwright-report/
+test-results/
+blob-report/
