@@ -1,3 +1,8 @@
+> [!IMPORTANT]
+> **Projeto arquivado (11/10/2026).** O simulador foi refeito, com a regra do DICT corrigida pela especificação oficial e com testes unitários, de propriedade e E2E, e agora faz parte do **BacenTools**:
+> **https://bacentools.web.app/simulador-dict/** · código: **[vieiraes/bacentools](https://github.com/vieiraes/bacentools)**.
+> O histórico da reescrita está na branch [`feat/regra-dict-e-testes`](https://github.com/vieiraes/simulador-fichas-bacen/tree/feat/regra-dict-e-testes).
+
 # Simulador de Controle de Fichas DICT (SPA)
 
 Esta aplicação foi desenvolvida exclusivamente para simular cenários de transações e consultas no DICT (Diretório de Identificadores de Contas Transacionais). Não realiza transações ou consultas reais, mas simula o comportamento das regras de limitação de consultas e consumo de "fichas" (tokens).
